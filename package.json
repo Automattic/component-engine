@@ -1,0 +1,82 @@
+{
+  "name": "component-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WordPress page component engine",
+  "main": "build/index.js",
+  "scripts": {
+    "start": "npm run build && npm run watch",
+    "test": "NODE_ENV=development mocha --compilers js:babel-register test",
+    "build:lib": "NODE_ENV=development babel --out-dir build src && cp src/themes/default.json build/themes/",
+    "build:app": "NODE_ENV=development webpack",
+    "build": "npm run build:lib && npm run build:app && npm run copy",
+    "dist:lib": "NODE_ENV=production babel --out-dir build src && cp src/themes/default.json build/themes/",
+    "dist:app": "NODE_ENV=production webpack",
+    "dist": "npm run dist:lib && npm run dist:app && npm run copy",
+    "distclean": "rm -rf build",
+    "watch": "onchange '**/*.js' -e 'build/**/*.js' -- npm run build",
+    "copy": "copytotheplace *.php build themes"
+  },
+  "keywords": [
+    "wordpress",
+    "themes",
+    "contentblocks",
+    "react"
+  ],
+  "author": "Automattic",
+  "license": "GPL-2.0+",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.8",
+    "babel-plugin-lodash": "^3.2.10",
+    "babel-preset-react-app": "^1.0.0",
+    "babel-register": "^6.18.0",
+    "babel-root-import": "^4.1.4",
+    "chai": "^3.5.0",
+    "classnames": "^2.2.5",
+    "copytotheplace": "^0.1.1",
+    "css": "^2.2.1",
+    "enzyme": "^2.6.0",
+    "es6-promise": "^4.0.5",
+    "eslint": "^3.10.2",
+    "eslint-config-wpcalypso": "^0.6.0",
+    "eslint-plugin-wpcalypso": "^3.0.2",
+    "json-loader": "^0.5.4",
+    "lodash": "^4.17.2",
+    "mocha": "^3.2.0",
+    "onchange": "^3.0.2",
+    "react": "^15.4.1",
+    "react-addons-test-utils": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "shortid": "^2.2.6",
+    "styled-components": "^1.1.2",
+    "traverse": "^0.6.6",
+    "webpack": "^1.13.3",
+    "whatwg-fetch": "^2.0.1"
+  },
+  "babel": {
+    "plugins": [
+      "babel-root-import",
+      "lodash"
+    ],
+    "presets": [
+      "react-app"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "wpcalypso/react",
+    "rules": {
+      "wpcalypso/jsx-classname-namespace": 0,
+      "max-len": 0
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Automattic/component-engine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Automattic/component-engine/issues"
+  },
+  "homepage": "https://github.com/Automattic/component-engine#readme"
+}
