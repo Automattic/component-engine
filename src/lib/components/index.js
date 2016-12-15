@@ -9,14 +9,8 @@ const componentMap = {
 	ErrorComponent: ErrorComponent,
 };
 
-const partialMap = {};
-
 function getNotFoundComponent( componentType ) {
 	return () => <p>I could not find the component '{componentType}'!</p>;
-}
-
-function getNotFoundPartial( partialType ) {
-	return { componentType: 'ErrorComponent', props: { message: `I could not find the partial '${ partialType }'` } };
 }
 
 function getComponentEntryByType( componentType ) {
@@ -53,12 +47,4 @@ export function canComponentHaveChildren( componentType ) {
 
 export function registerComponent( componentType, component, properties = {} ) {
 	componentMap[ componentType ] = { component, properties };
-}
-
-export function getPartialByType( partialType ) {
-	return partialMap[ partialType ] || getNotFoundPartial( partialType );
-}
-
-export function registerPartial( partialType, componentConfig ) {
-	partialMap[ partialType ] = componentConfig;
 }
