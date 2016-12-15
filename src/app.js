@@ -10,13 +10,14 @@ import omit from 'lodash/omit';
 /**
  * Internal dependencies
  */
-import { renderComponent, registerComponent, apiDataWrapper } from '~/src';
+import { renderComponent, registerComponent, renderComponentToString, apiDataWrapper } from '~/src';
 
 const ComponentThemes = {
 	React,
 	styled,
 	omit,
 	renderComponent,
+	renderComponentToString,
 	registerComponent,
 	apiDataWrapper,
 };

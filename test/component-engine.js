@@ -8,7 +8,7 @@ import chaiEnzyme from 'chai-enzyme';
 chai.use( chaiEnzyme() );
 
 import ComponentThemes from '~/src/app';
-const { renderComponent, registerComponent } = ComponentThemes;
+const { renderComponent, registerComponent, renderComponentToString } = ComponentThemes;
 
 const TextWidget = ( { text, color, componentId, className } ) => {
 	return (
@@ -20,6 +20,15 @@ const TextWidget = ( { text, color, componentId, className } ) => {
 	);
 };
 registerComponent( 'TextWidget', TextWidget );
+
+const HelloWidget = ( { className } ) => {
+	return (
+		<div className={ className }>
+			<p>hello</p>
+		</div>
+	);
+};
+registerComponent( 'HelloWidget', HelloWidget );
 
 const ColumnComponent = ( props ) => {
 	const { children, className } = props;
@@ -122,5 +131,13 @@ describe( 'renderComponent()', function() {
 			const wrapper = shallow( Result );
 			expect( wrapper.find( '.TextWidget' ) ).to.have.prop( 'text', 'hi there' );
 		} );
+	} );
+} );
+
+describe( 'renderComponentToString()', function() {
+	it( 'returns a string representation of the component', function() {
+		component = { componentType: 'HelloWidget', id: 'myWidget' };
+		const out = renderComponentToString( component );
+		expect( out ).to.equal( '<div class="HelloWidget myWidget"><p>hello</p></div>' );
 	} );
 } );

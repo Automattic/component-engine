@@ -2,6 +2,7 @@
  * External dependencies
  */
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import classNames from 'classnames';
 import shortid from 'shortid';
 
@@ -31,3 +32,7 @@ export function renderComponent( componentConfig ) {
 	return buildComponentFromConfig( componentConfig );
 }
 
+export function renderComponentToString( componentConfig ) {
+	const instance = buildComponentFromConfig( componentConfig );
+	return ReactDOMServer.renderToStaticMarkup( instance );
+}
