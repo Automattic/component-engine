@@ -7,13 +7,9 @@
   "scripts": {
     "start": "npm run build && npm run watch",
     "test": "NODE_ENV=development mocha --compilers js:babel-register test",
-    "build:lib": "NODE_ENV=development babel --out-dir build src && cp src/themes/default.json build/themes/",
+    "build:lib": "NODE_ENV=development babel --out-dir build src",
     "build:app": "NODE_ENV=development webpack",
     "build": "npm run build:lib && npm run build:app && npm run copy",
-    "dist:lib": "NODE_ENV=production babel --out-dir build src && cp src/themes/default.json build/themes/",
-    "dist:app": "NODE_ENV=production webpack",
-    "dist": "npm run dist:lib && npm run dist:app && npm run copy",
-    "distclean": "rm -rf build",
     "watch": "onchange '**/*.js' -e 'build/**/*.js' -- npm run build",
     "copy": "copytotheplace *.php build themes"
   },
