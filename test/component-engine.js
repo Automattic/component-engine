@@ -1,6 +1,7 @@
 /* eslint-disable wpcalypso/import-docblock */
 /* globals describe, it, beforeEach */
 import React from 'react';
+import omit from 'lodash/omit';
 import { shallow } from 'enzyme';
 import chai, { expect } from 'chai';
 import chaiEnzyme from 'chai-enzyme';
@@ -9,20 +10,24 @@ chai.use( chaiEnzyme() );
 import ComponentThemes from '~/src/app';
 const { renderComponent, registerComponent } = ComponentThemes;
 
-const TextWidget = ( { text, color, className } ) => {
+const TextWidget = ( { text, color, componentId, className } ) => {
 	return (
 		<div className={ className }>
 			<p>text is: { text || 'This is a text widget with no data!' }</p>
 			<p>color is: { color || 'default' }</p>
+			<p>ID is: { componentId || 'default' }</p>
 		</div>
 	);
 };
 registerComponent( 'TextWidget', TextWidget );
 
-const ColumnComponent = ( { children, className } ) => {
+const ColumnComponent = ( props ) => {
+	const { children, className } = props;
+	const childProps = omit( props, [ 'children', 'className' ] );
+	const newChildren = React.Children.map( children, child => React.cloneElement( child, { ...childProps } ) );
 	return (
 		<div className={ className }>
-			{ children }
+			{ newChildren }
 		</div>
 	);
 };
@@ -84,7 +89,14 @@ describe( 'renderComponent()', function() {
 	} );
 
 	describe( 'for a component without an id', function() {
-		it( 'gets an id assigned' );
+		beforeEach( function() {
+			component = { componentType: 'TextWidget', props: { text: 'hello world' } };
+		} );
+
+		it( 'gets an id assigned', function() {
+			const Result = renderComponent( component );
+			expect( Result.props.componentId ).to.be.ok;
+		} );
 	} );
 
 	describe( 'for a component with children', function() {
@@ -105,6 +117,10 @@ describe( 'renderComponent()', function() {
 			expect( wrapper ).to.have.descendants( '.TextWidget' );
 		} );
 
-		it( 'passes its props on to the children' );
+		it( 'passes its props on to the children if it is configured to do so', function() {
+			const Result = renderComponent( component );
+			const wrapper = shallow( Result );
+			expect( wrapper.find( '.TextWidget' ) ).to.have.prop( 'text', 'hi there' );
+		} );
 	} );
 } );
