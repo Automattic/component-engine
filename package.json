@@ -11,6 +11,7 @@
     "build:app": "NODE_ENV=development webpack",
     "build": "npm run build:lib && npm run build:app && npm run copy",
     "watch": "onchange '**/*.js' -e 'build/**/*.js' -- npm run build",
+    "test:watch": "onchange '**/*.js' -e 'build/**/*.js' -- npm run test",
     "copy": "copytotheplace *.php build themes"
   },
   "keywords": [
