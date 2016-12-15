@@ -66,6 +66,11 @@
     "rules": {
       "wpcalypso/jsx-classname-namespace": 0,
       "max-len": 0
+    },
+    "parserOptions": {
+      "ecmaFeatures": {
+        "experimentalObjectRestSpread": true
+      }
     }
   },
   "repository": {
