@@ -140,4 +140,10 @@ describe( 'renderComponentToString()', function() {
 		const out = renderComponentToString( component );
 		expect( out ).to.equal( '<div class="HelloWidget myWidget"><p>hello</p></div>' );
 	} );
+
+	it( 'returns a string representation of a component with children', function() {
+		component = { componentType: 'ColumnComponent', id: 'col', children: [ { componentType: 'HelloWidget', id: 'myWidget' } ] };
+		const out = renderComponentToString( component );
+		expect( out ).to.equal( '<div class="ColumnComponent col"><div class="HelloWidget myWidget"><p>hello</p></div></div>' );
+	} );
 } );
