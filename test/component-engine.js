@@ -2,13 +2,13 @@
 /* globals describe, it, beforeEach */
 import React from 'react';
 import omit from 'lodash/omit';
-import { shallow } from 'enzyme';
+import { shallow, render } from 'enzyme';
 import chai, { expect } from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 chai.use( chaiEnzyme() );
 
 import ComponentThemes from '~/src/app';
-const { renderComponent, registerComponent, renderComponentToString } = ComponentThemes;
+const { renderComponent, registerComponent, renderComponentToString, addStringOutput } = ComponentThemes;
 
 const TextWidget = ( { text, color, componentId, className } ) => {
 	return (
@@ -24,11 +24,14 @@ registerComponent( 'TextWidget', TextWidget );
 const HelloWidget = ( { className } ) => {
 	return (
 		<div className={ className }>
-			<p>hello</p>
+			<p>hellothere</p>
 		</div>
 	);
 };
 registerComponent( 'HelloWidget', HelloWidget );
+
+const sayBye = ( { className } ) => <div className={ className }><p>goodbye</p></div>;
+registerComponent( 'HelloByeWidget', addStringOutput( sayBye )( HelloWidget ) );
 
 const ColumnComponent = ( props ) => {
 	const { children, className } = props;
@@ -97,6 +100,22 @@ describe( 'renderComponent()', function() {
 		} );
 	} );
 
+	describe( 'for a component with an addStringOutput wrapper', function() {
+		it( 'does not render the addStringOutput method', function() {
+			component = { componentType: 'HelloByeWidget', id: 'myWidget' };
+			const Result = renderComponent( component );
+			const wrapper = render( Result );
+			expect( wrapper.text() ).to.contain( 'hellothere' );
+		} );
+
+		it( 'does not render the addStringOutput method of children', function() {
+			component = { componentType: 'ColumnComponent', id: 'col', children: [ { componentType: 'HelloByeWidget', id: 'myWidget' } ] };
+			const Result = renderComponent( component );
+			const wrapper = render( Result );
+			expect( wrapper.text() ).to.contain( 'hellothere' );
+		} );
+	} );
+
 	describe( 'for a component without an id', function() {
 		beforeEach( function() {
 			component = { componentType: 'TextWidget', props: { text: 'hello world' } };
@@ -138,12 +157,28 @@ describe( 'renderComponentToString()', function() {
 	it( 'returns a string representation of the component', function() {
 		component = { componentType: 'HelloWidget', id: 'myWidget' };
 		const out = renderComponentToString( component );
-		expect( out ).to.equal( '<div class="HelloWidget myWidget"><p>hello</p></div>' );
+		expect( out ).to.equal( '<div class="HelloWidget myWidget"><p>hellothere</p></div>' );
 	} );
 
-	it( 'returns a string representation of a component with children', function() {
-		component = { componentType: 'ColumnComponent', id: 'col', children: [ { componentType: 'HelloWidget', id: 'myWidget' } ] };
-		const out = renderComponentToString( component );
-		expect( out ).to.equal( '<div class="ColumnComponent col"><div class="HelloWidget myWidget"><p>hello</p></div></div>' );
+	describe( 'for a component with children', function() {
+		it( 'returns a string representation of a component and its children', function() {
+			component = { componentType: 'ColumnComponent', id: 'col', children: [ { componentType: 'HelloWidget', id: 'myWidget' } ] };
+			const out = renderComponentToString( component );
+			expect( out ).to.equal( '<div class="ColumnComponent col"><div class="HelloWidget myWidget"><p>hellothere</p></div></div>' );
+		} );
+	} );
+
+	describe( 'for a component with an addStringOutput wrapper', function() {
+		it( 'returns the result of the addStringOutput method instead of the render method', function() {
+			component = { componentType: 'HelloByeWidget', id: 'myWidget' };
+			const out = renderComponentToString( component );
+			expect( out ).to.equal( '<div class="HelloByeWidget myWidget"><p>goodbye</p></div>' );
+		} );
+
+		it( 'returns the result of the addStringOutput method of children instead of the render method', function() {
+			component = { componentType: 'ColumnComponent', id: 'col', children: [ { componentType: 'HelloByeWidget', id: 'myWidget' } ] };
+			const out = renderComponentToString( component );
+			expect( out ).to.contain( '<div class="HelloByeWidget myWidget"><p>goodbye</p></div>' );
+		} );
 	} );
 } );

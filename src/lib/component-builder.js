@@ -15,15 +15,16 @@ function buildComponent( Component, props = {}, children = [] ) {
 	return <Component key={ props.key } { ...props }>{ children }</Component>;
 }
 
-function buildComponentFromConfig( componentConfig ) {
+function buildComponentFromConfig( componentConfig, additionalProps = {} ) {
 	const { id, componentType, children, props } = componentConfig;
 	const componentId = id || shortid.generate();
 	const Component = getComponentByType( componentType );
-	const childComponents = children ? children.map( child => buildComponentFromConfig( child ) ) : null;
+	const childComponents = children ? children.map( child => buildComponentFromConfig( child, additionalProps ) ) : null;
+	const { renderingToString } = additionalProps;
 	const componentProps = Object.assign(
 		{},
 		props || {},
-		{ className: classNames( componentType, componentId ), key: componentId, componentId }
+		{ className: classNames( componentType, componentId ), key: componentId, componentId, renderingToString }
 	);
 	return buildComponent( Component, componentProps, childComponents );
 }
@@ -33,6 +34,6 @@ export function renderComponent( componentConfig ) {
 }
 
 export function renderComponentToString( componentConfig ) {
-	const instance = buildComponentFromConfig( componentConfig );
+	const instance = buildComponentFromConfig( componentConfig, { renderingToString: true } );
 	return ReactDOMServer.renderToStaticMarkup( instance );
 }

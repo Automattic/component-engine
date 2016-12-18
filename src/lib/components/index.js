@@ -48,3 +48,14 @@ export function canComponentHaveChildren( componentType ) {
 export function registerComponent( componentType, component, properties = {} ) {
 	componentMap[ componentType ] = { component, properties };
 }
+
+export function addStringOutput( StringComponent ) {
+	return ( Component ) => {
+		return ( props ) => {
+			if ( props.renderingToString ) {
+				return <StringComponent { ...props }>{ props.children }</StringComponent>;
+			}
+			return <Component { ...props }>{ props.children }</Component>;
+		};
+	};
+}

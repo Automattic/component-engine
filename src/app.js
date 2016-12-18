@@ -10,7 +10,7 @@ import omit from 'lodash/omit';
 /**
  * Internal dependencies
  */
-import { renderComponent, registerComponent, renderComponentToString, apiDataWrapper } from '~/src';
+import { renderComponent, registerComponent, addStringOutput, renderComponentToString, apiDataWrapper } from '~/src';
 
 const ComponentThemes = {
 	React,
@@ -18,6 +18,7 @@ const ComponentThemes = {
 	omit,
 	renderComponent,
 	renderComponentToString,
+	addStringOutput,
 	registerComponent,
 	apiDataWrapper,
 };
