@@ -5,7 +5,7 @@ A WordPress page component engine
 
 Using a specialized editor or site builder tool, a page can be constructed out of content blocks ("components"). When saved, these components are used to generate raw HTML and that markup is saved as the page content.
 
-That is the blocks are functions to turn settings, layout, and content into markup. The output markup can be anything that can be used in the "text" tab of the WordPress editor, including shortcodes, but shortcodes should only be used when necessary (e.g.: to display a list of posts or the site title).
+That is the blocks are functions to turn settings, layout, and content into markup. The output markup can be anything that can be used in the "text" tab of the WordPress editor.
 
 When the page is edited, the markup will be parsed by this engine to transform it back into component instances for editing.
 
@@ -55,30 +55,46 @@ registerComponent( 'TextWidget', TextWidget, {
 
 ## Dynamic Components
 
-Some components will require data from the server at render-time and therefore cannot be transformed directly into HTML. These components will render shortcodes.
+Some components will require data from the server at render-time and therefore cannot be transformed directly into HTML. These components have two different types of rendering required: one for a live preview while editing (rendered by React) and one for the site front-end (rendered by PHP).
+
+For the front-end, these components will save some placeholder in their content which will be transformed into the dynamic data at render time. To define the placeholder, a React Higher Order Component function called `addStringOutput()` is used to set a different rendering method for saving to page content.
+
+For the editor view, we use a React Higher Order Component function called `apiDataWrapper()`. The function accepts a mapping function to map the api data into props for the component. The api data can be accessed using the special function `getApiEndpoint()` which is passed as the first argument to the mapping function. If the data is not available yet, it will be fetched.
 
 Here is an example of a component that renders the site header:
 
 ```js
 const ComponentEngine = window.ComponentEngine;
-const { React, registerComponent, apiDataWrapper } = ComponentEngine;
+const { React, registerComponent, apiDataWrapper, addStringOutput } = ComponentEngine;
 
-const SiteHeader = ( { className } ) => {
+const SiteHeader = ( { siteTitle, siteTagline, link, className } ) => {
 	return (
-		<div className={ className }><a href="[rooturl]">
-			<h1 className="HeaderText__title">[sitetitle]</h1>
-			<div className="HeaderText__tagline">[sitetagline]</div>
+		<div className={ className }><a href={ link }>
+			<h1 className="HeaderText__title">{ siteTitle }</h1>
+			<div className="HeaderText__tagline">{ siteTagline }</div>
 		</a></div>
 	);
 };
 
-registerComponent( 'SiteHeader', SiteHeader, {
+// TODO: this placeholder is not finalized yet
+const renderToString = ( props ) => {
+	return <WPComponent { ...props } />;
+};
+
+const mapApiToProps = ( getApiEndpoint ) => {
+	const siteInfo = getApiEndpoint( '/' );
+	return {
+		siteTitle: siteInfo && siteInfo.name,
+		siteTagline: siteInfo && siteInfo.description,
+		link: siteInfo && siteInfo.url,
+	};
+};
+
+registerComponent( 'SiteHeader', apiDataWrapper( mapApiToProps )( addStringOutput( renderToString )( SiteHeader ) ), {
 	title: 'Site Header',
 	description: 'Header containing site title and tagline.',
 } );
 ```
-
-**TODO**: how would an editor render this component in a preview without performing a round-trip to the server?
 
 ## Component Styles
 
