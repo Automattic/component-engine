@@ -178,7 +178,7 @@ Here is that `Row` when saved to a page:
 ```html
 <span data-block-type="Row" data-block-id="gB0NV05e">
 <div class="Row gB0NV05e">
-<span data-block-type="TextWidget" data-block-id="yLA6m0oM" text="I am the first column">
+<span data-block-type="TextWidget" data-block-id="yLA6m0oM" data-block-text="I am the first column">
 <div class="TextWidget yLA6m0oM">I am the first column</div>
 </span>
 <span data-block-type="TextWidget" data-block-id="5bAyD0LO" text="I am the second column">

@@ -5,8 +5,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import classNames from 'classnames';
 import shortid from 'shortid';
-import omit from 'lodash/omit';
-import includes from 'lodash/includes';
+import startsWith from 'lodash/startsWith';
 
 /**
  * Internal dependencies
@@ -14,19 +13,10 @@ import includes from 'lodash/includes';
 import { getComponentByType } from '~/src/lib/components';
 
 const Wrapper = ( props ) => {
-	const { children, className } = props;
-	const childProps = omit( props, [ 'children', 'className', 'data-block-type', 'data-block-id' ] );
-	const newChildren = React.Children.map( children, child => React.cloneElement( child, { ...childProps } ) );
-	const dataKeys = [ 'data-block-type', 'data-block-id' ];
-	const dataProps = Object.keys( props ).filter( key => includes( dataKeys, key ) ).reduce( ( newProps, key ) => {
-		newProps[ key ] = props[ key ];
-		return newProps;
+	const dataProps = Object.keys( props ).filter( key => startsWith( key, 'data-block-' ) ).reduce( ( newProps, key ) => {
+		return { ...newProps, [ key ]: props[ key ] };
 	}, {} );
-	return (
-		<span className={ className } { ...dataProps }>
-			{ newChildren }
-		</span>
-	);
+	return <span { ...dataProps }>{ props.children }</span>;
 };
 
 function buildComponent( Component, props = {}, children = [] ) {
