@@ -160,11 +160,23 @@ describe( 'renderComponentToString()', function() {
 		expect( out ).to.contain( '<div class="HelloWidget myWidget"><p>hellothere</p></div>' );
 	} );
 
+	it( 'returns a string representation of the component surrounded by comments that encode the component', function() {
+		component = { componentType: 'HelloWidget', id: 'myWidget' };
+		const out = renderComponentToString( component );
+		expect( out ).to.contain( '<!-- @block-start type:HelloWidget id:myWidget --><div class="HelloWidget myWidget"><p>hellothere</p></div><!-- @block-end -->' );
+	} );
+
 	describe( 'for a component with children', function() {
 		it( 'returns a string representation of a component and its children', function() {
 			component = { componentType: 'ColumnComponent', id: 'col', children: [ { componentType: 'HelloWidget', id: 'myWidget' } ] };
 			const out = renderComponentToString( component );
 			expect( out ).to.contain( '<div class="ColumnComponent col"><div class="HelloWidget myWidget"><p>hellothere</p></div></div>' );
+		} );
+
+		it( 'returns a string representation of the component\'s children surrounded by comments that encode the child', function() {
+			component = { componentType: 'ColumnComponent', id: 'col', children: [ { componentType: 'HelloWidget', id: 'myWidget' } ] };
+			const out = renderComponentToString( component );
+			expect( out ).to.contain( '<!-- @block-start type:HelloWidget id:myWidget --><div class="HelloWidget myWidget"><p>hellothere</p></div><!-- @block-end -->' );
 		} );
 	} );
 
