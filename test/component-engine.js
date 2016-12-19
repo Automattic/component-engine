@@ -167,9 +167,9 @@ describe( 'renderComponentToString()', function() {
 	} );
 
 	it( 'returns a string representation of the component surrounded by data that encodes the component props', function() {
-		component = { componentType: 'TextWidget', id: 'myWidget', text: 'hello world' };
+		component = { componentType: 'TextWidget', id: 'myWidget', props: { text: 'hello world' } };
 		const out = renderComponentToString( component );
-		expect( out ).to.contain( '<span data-block-type="TextWidget" data-block-id="myWidget" data-block-text="hello world"><div class="TextWidget myWidget"><p>hello world</p></div></span>' );
+		expect( out ).to.contain( '<span data-block-type="TextWidget" data-block-id="myWidget" data-block-text="hello world"><div class="TextWidget myWidget"><p>text is: hello world</p><p>color is: default</p><p>ID is: myWidget</p></div></span>' );
 	} );
 
 	describe( 'for a component with children', function() {
