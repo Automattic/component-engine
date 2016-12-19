@@ -134,7 +134,7 @@ Any component using `componentType` can also specify `id` as a unique identifier
 
 When styles are applied by a theme or page, they are selected by either the `componentType` (to affect all components of that type) or by `id` (to affect just one instance of a component in a page).
 
-When serialized and saved to a page, this data will be written to HTML with meta-data encoded in comments.
+When serialized and saved to a page, this data will be written to HTML with meta-data encoded in a wrapper tag.
 
 Here is the serialized form of a simple TextWidget component:
 
@@ -145,9 +145,9 @@ Here is the serialized form of a simple TextWidget component:
 Here is that same component saved to a page:
 
 ```html
-<!-- @block-start type:TextWidget -->
+<span data-block-type="TextWidget" data-block-id="5bAyD0LO">
 <div class="TextWidget 5bAyD0LO">This is a text widget with no data!</div>
-<!-- @block-end -->
+</span>
 ```
 
 Here is a TextWidget that also sets some default text for the component by passing props (the props that a component accepts are defined in the component; `TextWidget` accepts just one: `text`).
@@ -159,9 +159,9 @@ Here is a TextWidget that also sets some default text for the component by passi
 Here is that component saved to a page:
 
 ```html
-<!-- @block-start type:TextWidget id:helloWorld text:hello%20world -->
+<span data-block-type="TextWidget" data-block-id="5bAyD0LO">
 <div class="TextWidget helloWorld">hello world</div>
-<!-- @block-end -->
+</span>
 ```
 
 Using components as wrappers for other components requires using `children`. Here is a `Row` instance with two instances of `TextWidget`:
@@ -176,16 +176,16 @@ Using components as wrappers for other components requires using `children`. Her
 Here is that `Row` when saved to a page:
 
 ```html
-<!-- @block-start type:Row -->
+<span data-block-type="Row" data-block-id="gB0NV05e">
 <div class="Row gB0NV05e">
-<!-- @block-start type:TextWidget text:I%20am%20the%20first%20column -->
+<span data-block-type="TextWidget" data-block-id="yLA6m0oM" text="I am the first column">
 <div class="TextWidget yLA6m0oM">I am the first column</div>
-<!-- @block-end -->
-<!-- @block-start type:TextWidget text:I%20am%20the%20second%20column -->
+</span>
+<span data-block-type="TextWidget" data-block-id="5bAyD0LO" text="I am the second column">
 <div class="TextWidget 5bAyD0LO">I am the second column</div>
-<!-- @block-end -->
+</span>
 </div>
-<!-- @block-end -->
+</span>
 ```
 
 ## Rendering Functions
