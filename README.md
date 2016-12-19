@@ -188,3 +188,10 @@ Here is that `Row` when saved to a page:
 <!-- @block-end -->
 ```
 
+## Rendering Functions
+
+There are two functions exposed by this library that can be used to render components: `renderComponent()` and `renderComponentToString()`.
+
+`renderComponent()` is passed a JSON configuration object like those above and will transform it into a React component which will be returned by the function (including any children). This is intended to be used in an editor or other tool which is capable of rendering client-side.
+
+`renderComponentToString()` is a similar rendering method, but if a component has used the `addStringOutput()` Higher Order Component, the secondary rendering function will be used instead. This allows saving different component output to post content than what would be rendered in a preview.
