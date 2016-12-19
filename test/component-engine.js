@@ -157,14 +157,14 @@ describe( 'renderComponentToString()', function() {
 	it( 'returns a string representation of the component', function() {
 		component = { componentType: 'HelloWidget', id: 'myWidget' };
 		const out = renderComponentToString( component );
-		expect( out ).to.equal( '<div class="HelloWidget myWidget"><p>hellothere</p></div>' );
+		expect( out ).to.contain( '<div class="HelloWidget myWidget"><p>hellothere</p></div>' );
 	} );
 
 	describe( 'for a component with children', function() {
 		it( 'returns a string representation of a component and its children', function() {
 			component = { componentType: 'ColumnComponent', id: 'col', children: [ { componentType: 'HelloWidget', id: 'myWidget' } ] };
 			const out = renderComponentToString( component );
-			expect( out ).to.equal( '<div class="ColumnComponent col"><div class="HelloWidget myWidget"><p>hellothere</p></div></div>' );
+			expect( out ).to.contain( '<div class="ColumnComponent col"><div class="HelloWidget myWidget"><p>hellothere</p></div></div>' );
 		} );
 	} );
 
@@ -172,7 +172,7 @@ describe( 'renderComponentToString()', function() {
 		it( 'returns the result of the addStringOutput method instead of the render method', function() {
 			component = { componentType: 'HelloByeWidget', id: 'myWidget' };
 			const out = renderComponentToString( component );
-			expect( out ).to.equal( '<div class="HelloByeWidget myWidget"><p>goodbye</p></div>' );
+			expect( out ).to.contain( '<div class="HelloByeWidget myWidget"><p>goodbye</p></div>' );
 		} );
 
 		it( 'returns the result of the addStringOutput method of children instead of the render method', function() {
