@@ -145,9 +145,9 @@ Here is the serialized form of a simple TextWidget component:
 Here is that same component saved to a page:
 
 ```html
-<span data-block-type="TextWidget" data-block-id="5bAyD0LO">
+<!-- wp:TextWidget -->
 <div class="TextWidget 5bAyD0LO">This is a text widget with no data!</div>
-</span>
+<!-- /wp -->
 ```
 
 Here is a TextWidget that also sets some default text for the component by passing props (the props that a component accepts are defined in the component; `TextWidget` accepts just one: `text`).
@@ -159,9 +159,9 @@ Here is a TextWidget that also sets some default text for the component by passi
 Here is that component saved to a page:
 
 ```html
-<span data-block-type="TextWidget" data-block-id="5bAyD0LO">
+<!-- wp:TextWidget -->
 <div class="TextWidget helloWorld">hello world</div>
-</span>
+<!-- /wp -->
 ```
 
 Using components as wrappers for other components requires using `children`. Here is a `Row` instance with two instances of `TextWidget`:
@@ -176,16 +176,16 @@ Using components as wrappers for other components requires using `children`. Her
 Here is that `Row` when saved to a page:
 
 ```html
-<span data-block-type="Row" data-block-id="gB0NV05e">
+<!-- wp:Row -->
 <div class="Row gB0NV05e">
-<span data-block-type="TextWidget" data-block-id="yLA6m0oM" data-block-text="I am the first column">
+<!-- wp:TextWidget -->
 <div class="TextWidget yLA6m0oM">I am the first column</div>
-</span>
-<span data-block-type="TextWidget" data-block-id="5bAyD0LO" text="I am the second column">
+<!-- /wp -->
+<!-- wp:TextWidget -->
 <div class="TextWidget 5bAyD0LO">I am the second column</div>
-</span>
+<!-- /wp -->
 </div>
-</span>
+<!-- /wp -->
 ```
 
 ## Rendering Functions
