@@ -4,7 +4,6 @@
  * External dependencies
  */
 import React from 'react';
-import styled from 'styled-components';
 import omit from 'lodash/omit';
 
 /**
@@ -21,7 +20,6 @@ import {
 
 const ComponentEngine = {
 	React,
-	styled,
 	omit,
 	renderComponent,
 	renderComponentToString,
