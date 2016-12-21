@@ -8,7 +8,7 @@ import chaiEnzyme from 'chai-enzyme';
 chai.use( chaiEnzyme() );
 
 import ComponentThemes from '~/src/app';
-const { renderComponent, registerComponent, renderComponentToString, addStringOutput } = ComponentThemes;
+const { renderComponent, registerComponent, renderComponentToString, renderStylesToString, addStringOutput, addStyles } = ComponentThemes;
 
 const TextWidget = ( { text, color, componentId, className } ) => {
 	return (
@@ -44,6 +44,13 @@ const ColumnComponent = ( props ) => {
 	);
 };
 registerComponent( 'ColumnComponent', ColumnComponent );
+
+const BasicText = ( { className, text } ) => <div className={ className }>{ text }</div>;
+const StyledText = addStyles( '.StyledText{color:green;}' )( BasicText );
+registerComponent( 'StyledText', StyledText );
+
+const StyledHello = addStyles( '.StyledText{color:green;}' )( HelloWidget );
+registerComponent( 'StyledHello', StyledHello );
 
 let component;
 
@@ -199,6 +206,47 @@ describe( 'renderComponentToString()', function() {
 			component = { componentType: 'ColumnComponent', id: 'col', children: [ { componentType: 'HelloByeWidget', id: 'myWidget' } ] };
 			const out = renderComponentToString( component );
 			expect( out ).to.contain( '<div class="HelloByeWidget myWidget"><p>goodbye</p></div>' );
+		} );
+	} );
+} );
+
+describe( 'renderStylesToString()', function() {
+	describe( 'for a component with no styles', function() {
+		it( 'returns an empty string', function() {
+			component = { componentType: 'BasicText', id: 'myWidget', props: { text: 'hellothere' } };
+			const out = renderStylesToString( component );
+			expect( out ).to.be.empty;
+		} );
+	} );
+
+	describe( 'for a component with styles', function() {
+		it( 'returns a string with the styles for that component', function() {
+			component = { componentType: 'StyledText', id: 'myWidget', props: { text: 'hellothere' } };
+			const out = renderStylesToString( component );
+			expect( out ).to.equal( '.StyledText{color:green;}' );
+		} );
+	} );
+
+	describe( 'for a component with children that each have styles', function() {
+		it( 'returns a string that combines the styles for each child', function() {
+			component = { componentType: 'ColumnComponent', id: 'col', children: [
+				{ componentType: 'HelloByeWidget', id: 'myWidget' },
+				{ componentType: 'StyledText', id: 'myWidget1', props: { text: 'hellothere' } },
+				{ componentType: 'StyledHello', id: 'myWidget2' },
+			] };
+			const out = renderStylesToString( component );
+			expect( out ).to.contain( '.StyledText{color:green;}' );
+			expect( out ).to.contain( '.StyledHello{color:blue;}' );
+		} );
+
+		it( 'returns a string that does not duplicate the styles for duplicate children', function() {
+			component = { componentType: 'ColumnComponent', id: 'col', children: [
+				{ componentType: 'HelloByeWidget', id: 'myWidget' },
+				{ componentType: 'StyledText', id: 'myWidget1', props: { text: 'hellothere' } },
+				{ componentType: 'StyledText', id: 'myWidget2', props: { text: 'goodbye' } },
+			] };
+			const out = renderStylesToString( component );
+			expect( out ).to.equal( '.StyledText{color:green;}' );
 		} );
 	} );
 } );
