@@ -7,8 +7,8 @@ import chai, { expect } from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 chai.use( chaiEnzyme() );
 
-import ComponentThemes from '~/src/app';
-const { renderComponent, registerComponent, renderComponentToString, renderStylesToString, addStringOutput, addStyles } = ComponentThemes;
+import ComponentEngine from '~/src/app';
+const { renderComponent, registerComponent, renderComponentToString, renderStylesToString, addStringOutput, addStyles } = ComponentEngine;
 
 const TextWidget = ( { text, color, componentId, className } ) => {
 	return (

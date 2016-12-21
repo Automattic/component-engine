@@ -32,7 +32,7 @@ function addAdditionalStyles( styles, themeConfig ) {
 
 export function buildStylesFromTheme( themeConfig ) {
 	const stylesByComponent = themeConfig.styles || {};
-	return prependNamespaceToStyleString( '.ComponentThemes', expandStyleVariants( addAdditionalStyles( stylesByComponent, themeConfig ), themeConfig ) );
+	return prependNamespaceToStyleString( '.ComponentEngine', expandStyleVariants( addAdditionalStyles( stylesByComponent, themeConfig ), themeConfig ) );
 }
 
 export function writeStylesToPage( key, styles ) {

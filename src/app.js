@@ -12,7 +12,7 @@ import omit from 'lodash/omit';
  */
 import { renderComponent, registerComponent, addStringOutput, renderComponentToString, apiDataWrapper } from '~/src';
 
-const ComponentThemes = {
+const ComponentEngine = {
 	React,
 	styled,
 	omit,
@@ -24,7 +24,7 @@ const ComponentThemes = {
 };
 
 if ( typeof window !== 'undefined' ) {
-	window.ComponentThemes = ComponentThemes;
+	window.ComponentEngine = ComponentEngine;
 }
 
-export default ComponentThemes;
+export default ComponentEngine;

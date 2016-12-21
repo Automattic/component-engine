@@ -30,8 +30,8 @@ function fetchRequiredApiEndpoint( endpoint ) {
 }
 
 export function getBootstrappedRequiredApiData() {
-	if ( window.ComponentThemesApiData ) {
-		return window.ComponentThemesApiData;
+	if ( window.ComponentEngineApiData ) {
+		return window.ComponentEngineApiData;
 	}
 	return { api: {}, pageInfo: {} };
 }
