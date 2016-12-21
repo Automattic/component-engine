@@ -223,7 +223,7 @@ describe( 'renderStylesToString()', function() {
 		it( 'returns a string with the styles for that component', function() {
 			component = { componentType: 'StyledText', id: 'myWidget', props: { text: 'hellothere' } };
 			const out = renderStylesToString( component );
-			expect( out ).to.equal( '.StyledText{color:green;}' );
+			expect( out ).to.equal( '.ComponentEngine .StyledText{color:green;}' );
 		} );
 	} );
 
@@ -235,8 +235,8 @@ describe( 'renderStylesToString()', function() {
 				{ componentType: 'StyledHello', id: 'myWidget2' },
 			] };
 			const out = renderStylesToString( component );
-			expect( out ).to.contain( '.StyledText{color:green;}' );
-			expect( out ).to.contain( '.StyledHello{color:blue;}' );
+			expect( out ).to.contain( '.ComponentEngine .StyledText{color:green;}' );
+			expect( out ).to.contain( '.ComponentEngine .StyledHello{color:blue;}' );
 		} );
 
 		it( 'returns a string that does not duplicate the styles for duplicate children', function() {
@@ -246,7 +246,7 @@ describe( 'renderStylesToString()', function() {
 				{ componentType: 'StyledText', id: 'myWidget2', props: { text: 'goodbye' } },
 			] };
 			const out = renderStylesToString( component );
-			expect( out ).to.equal( '.StyledText{color:green;}' );
+			expect( out ).to.equal( '.ComponentEngine .StyledText{color:green;}' );
 		} );
 	} );
 } );
