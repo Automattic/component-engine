@@ -10,7 +10,14 @@ import omit from 'lodash/omit';
 /**
  * Internal dependencies
  */
-import { renderComponent, registerComponent, addStringOutput, renderComponentToString, apiDataWrapper } from '~/src';
+import {
+	renderComponent,
+	registerComponent,
+	addStringOutput,
+	renderComponentToString,
+	renderStylesToString,
+	apiDataWrapper,
+} from '~/src';
 
 const ComponentEngine = {
 	React,
@@ -21,6 +28,7 @@ const ComponentEngine = {
 	addStringOutput,
 	registerComponent,
 	apiDataWrapper,
+	renderStylesToString
 };
 
 if ( typeof window !== 'undefined' ) {

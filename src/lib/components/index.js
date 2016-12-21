@@ -3,6 +3,11 @@
  */
 import React from 'react';
 
+/**
+ * Internal dependencies
+ */
+import { prependNamespaceToStyles } from '~/src/lib/styles';
+
 const ErrorComponent = ( { message } ) => <p>{message}</p>;
 
 const componentMap = {
@@ -58,4 +63,18 @@ export function addStringOutput( StringComponent ) {
 			return <Component { ...props }>{ props.children }</Component>;
 		};
 	};
+}
+
+function getTypesInComponentTree( componentConfig ) {
+	const children = componentConfig.children || [];
+	return [ componentConfig.componentType ].concat( children.map( child => getTypesInComponentTree( child ) ) );
+}
+
+export function renderStylesToString( componentConfig ) {
+	const types = getTypesInComponentTree( componentConfig );
+	const stylesByType = types.reduce( ( styles, type ) => {
+		return { ...styles, [ type ]: getComponentPropertiesByType( type ).styles || '' };
+	}, {} );
+	const styles = Object.keys( stylesByType ).map( type => stylesByType[ type ] ).join( '' );
+	return prependNamespaceToStyles( '.ComponentEngine', styles ) || '';
 }

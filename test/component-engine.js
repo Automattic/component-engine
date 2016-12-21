@@ -8,7 +8,7 @@ import chaiEnzyme from 'chai-enzyme';
 chai.use( chaiEnzyme() );
 
 import ComponentEngine from '~/src/app';
-const { renderComponent, registerComponent, renderComponentToString, renderStylesToString, addStringOutput, addStyles } = ComponentEngine;
+const { renderComponent, registerComponent, renderComponentToString, renderStylesToString, addStringOutput } = ComponentEngine;
 
 const TextWidget = ( { text, color, componentId, className } ) => {
 	return (
@@ -46,11 +46,14 @@ const ColumnComponent = ( props ) => {
 registerComponent( 'ColumnComponent', ColumnComponent );
 
 const BasicText = ( { className, text } ) => <div className={ className }>{ text }</div>;
-const StyledText = addStyles( '.StyledText{color:green;}' )( BasicText );
-registerComponent( 'StyledText', StyledText );
 
-const StyledHello = addStyles( '.StyledText{color:green;}' )( HelloWidget );
-registerComponent( 'StyledHello', StyledHello );
+registerComponent( 'StyledText', BasicText, {
+	styles: '.StyledText{color:green;}',
+} );
+
+registerComponent( 'StyledHello', HelloWidget, {
+	styles: '.StyledHello{color:blue;}'
+} );
 
 let component;
 
