@@ -15,7 +15,6 @@ module.exports = {
 	},
 	entry: {
 		app: './src/app.js',
-		'core-components': './src/components/core-components.js',
 	},
 	output: {
 		path: './build',
