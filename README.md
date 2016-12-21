@@ -9,6 +9,15 @@ That is the blocks are functions to turn settings, layout, and content into mark
 
 When the page is edited, the markup will be parsed by this engine to transform it back into component instances for editing.
 
+## Rendering
+
+There are four functions exposed by this library.
+
+- `renderComponent()` is passed a JSON configuration object like those below and will transform it into a React component which will be returned by the function (including any children). This is intended to be used in an editor or other tool which is capable of rendering client-side.
+- `renderComponentToString()` is a similar rendering method, but if a component has used the `addStringOutput()` Higher Order Component, the secondary rendering function will be used instead. This allows saving different component output to post content than what would be rendered in a preview.
+- `renderStylesToString()` is also passed a JSON configuration object as above and prepares the styles for all the components within, returning a string of CSS already namespaced to `.ComponentEngine`.
+- `parseHtmlToComponent()` is passed an html string that was generated using `renderComponentToString()`. It will be turned into a JSON configuration of components. Only a single component configuration will actually be returned and all other components will be its children.
+
 ## Pages
 
 Pages are built of components, which are self-contained content blocks that have their own settings. Some components can also have child components which will be displayed within that component. This allows creating page layouts by composing components (a technique familiar to anyone who has used [React](https://facebook.github.io/react/) or similar libraries).
@@ -187,13 +196,3 @@ Here is that `Row` when saved to a page:
 </div>
 <!-- /wp -->
 ```
-
-## Rendering Functions
-
-There are two functions exposed by this library that can be used to render components: `renderComponent()` and `renderComponentToString()`.
-
-`renderComponent()` is passed a JSON configuration object like those above and will transform it into a React component which will be returned by the function (including any children). This is intended to be used in an editor or other tool which is capable of rendering client-side.
-
-`renderComponentToString()` is a similar rendering method, but if a component has used the `addStringOutput()` Higher Order Component, the secondary rendering function will be used instead. This allows saving different component output to post content than what would be rendered in a preview.
-
-`renderStylesToString()` is also passed a JSON configuration object as above and prepares the styles for all the components within, returning a string of CSS already namespaced to `.ComponentEngine`.
