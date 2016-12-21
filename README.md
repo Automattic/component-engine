@@ -98,15 +98,11 @@ registerComponent( 'SiteHeader', apiDataWrapper( mapApiToProps )( addStringOutpu
 
 ## Component Styles
 
-Some components need default styles applied that are independent of the theme. These can be applied in the component definition.
-
-To do this we use the `styled()` Higher Order Component function. See the documentation for [Styled Components](https://github.com/styled-components/styled-components) for more information.
-
-**TODO**: how will this work since the components are being rendered to a string and not to a DOM? We probably need our own simplified version.
+Some components need default styles applied that are independent of the theme. These can be applied when registering the component by adding a `styles` property to the third argument.
 
 ```js
 const ComponentEngine = window.ComponentEngine;
-const { React, registerComponent, styled } = ComponentEngine;
+const { React, registerComponent } = ComponentEngine;
 
 const RowComponent = ( { children, className } ) => {
 	return (
@@ -116,13 +112,17 @@ const RowComponent = ( { children, className } ) => {
 	);
 };
 
-const Styled = styled( RowComponent )`
+const styles = `.RowComponent {
 	display: flex;
 	justify-content: space-between;
-`;
+}`;
 
-registerComponent( 'Row', Styled );
+registerComponent( 'Row', RowComponent, { styles } );
 ```
+
+When rendering, calling the function `renderStylesToString()` for a component configuration will return a CSS string for that component and all its children. The CSS string will prevent duplicate component styles and will automatically prepend all styles with the class `.ComponentEngine` to prevent leaking the styles outside the view. **Make sure to wrap your components in this class when rendering.**
+
+It's suggested to inject these styles inline into each page.
 
 ## Component Serialization
 
@@ -195,3 +195,5 @@ There are two functions exposed by this library that can be used to render compo
 `renderComponent()` is passed a JSON configuration object like those above and will transform it into a React component which will be returned by the function (including any children). This is intended to be used in an editor or other tool which is capable of rendering client-side.
 
 `renderComponentToString()` is a similar rendering method, but if a component has used the `addStringOutput()` Higher Order Component, the secondary rendering function will be used instead. This allows saving different component output to post content than what would be rendered in a preview.
+
+`renderStylesToString()` is also passed a JSON configuration object as above and prepares the styles for all the components within, returning a string of CSS already namespaced to `.ComponentEngine`.
