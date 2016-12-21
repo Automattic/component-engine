@@ -134,7 +134,7 @@ Any component using `componentType` can also specify `id` as a unique identifier
 
 When styles are applied by a theme or page, they are selected by either the `componentType` (to affect all components of that type) or by `id` (to affect just one instance of a component in a page).
 
-When serialized and saved to a page, this data will be written to HTML with meta-data encoded in a wrapper tag.
+When serialized and saved to a page, this data will be written to HTML with meta-data encoded in a wrapper comment tag.
 
 Here is the serialized form of a simple TextWidget component:
 
