@@ -1,5 +1,7 @@
 /* eslint-disable wpcalypso/import-docblock */
 /* globals describe, it */
+
+//import { createElement } from 'react';
 import { expect } from 'chai';
 
 import { renderToString, createElement } from '~/src/lib/renderer';
@@ -9,6 +11,13 @@ describe( 'renderToString()', function() {
 		const component = createElement( 'p', null, 'hi' );
 		const out = renderToString( component );
 		expect( out ).to.equal( '<p>hi</p>' );
+	} );
+
+	it( 'returns a string with a tag wrapping plain text for a function component', function() {
+		const MyEm = ( { children } ) => createElement( 'em', null, children );
+		const component = createElement( MyEm, null, 'hi' );
+		const out = renderToString( component );
+		expect( out ).to.equal( '<em>hi</em>' );
 	} );
 
 	it( 'returns a string with a tag wrapping joined text for a component with many text children', function() {
@@ -37,5 +46,24 @@ describe( 'renderToString()', function() {
 		const component = createElement( 'p', null, [ child, ' there' ] );
 		const out = renderToString( component );
 		expect( out ).to.equal( '<p><em>yo</em> there</p>' );
+	} );
+
+	it( 'returns a string with a tag that expands its props to attributes for a text component', function() {
+		const component = createElement( 'a', { href: 'foo', target: 'top' }, 'link' );
+		const out = renderToString( component );
+		expect( out ).to.equal( '<a href="foo" target="top">link</a>' );
+	} );
+
+	it( 'returns a string with a tag that expands its className prop to a class attribute for a text component', function() {
+		const component = createElement( 'a', { className: 'cool' }, 'link' );
+		const out = renderToString( component );
+		expect( out ).to.equal( '<a class="cool">link</a>' );
+	} );
+
+	it( 'returns a string with a tag that uses its props to create a child for a function component', function() {
+		const MyEm = ( { name } ) => createElement( 'em', null, name );
+		const component = createElement( MyEm, { name: 'hi' } );
+		const out = renderToString( component );
+		expect( out ).to.equal( '<em>hi</em>' );
 	} );
 } );
