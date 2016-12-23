@@ -35,7 +35,7 @@ registerComponent( 'HelloByeWidget', addStringOutput( sayBye )( HelloWidget ) );
 
 const ColumnComponent = ( props ) => {
 	const { children, className } = props;
-	const childProps = omit( props, [ 'children', 'className' ] );
+	const childProps = omit( props, [ 'children', 'className', 'componentType', 'componentId', 'renderingToString' ] );
 	const newChildren = React.Children.map( children, child => React.cloneElement( child, { ...childProps } ) );
 	return (
 		<div className={ className }>
@@ -170,16 +170,16 @@ describe( 'renderComponentToString()', function() {
 		expect( out ).to.contain( '<div class="HelloWidget myWidget"><p>hellothere</p></div>' );
 	} );
 
-	it.skip( 'returns a string representation of the component surrounded by data that encodes the component', function() {
+	it( 'returns a string representation of the component surrounded by data that encodes the component', function() {
 		component = { componentType: 'HelloWidget', id: 'myWidget' };
 		const out = renderComponentToString( component );
 		expect( out ).to.contain( '<!-- wp:HelloWidget --><div class="HelloWidget myWidget"><p>hellothere</p></div><!-- /wp -->' );
 	} );
 
-	it.skip( 'returns a string representation of the component surrounded by data that encodes the component props', function() {
+	it( 'returns a string representation of the component surrounded by data that encodes the component props', function() {
 		component = { componentType: 'TextWidget', id: 'myWidget', props: { text: 'hello world' } };
 		const out = renderComponentToString( component );
-		expect( out ).to.contain( '<!-- wp:TextWidget --><div class="TextWidget myWidget"><p>text is: hello world</p><p>color is: default</p><p>ID is: myWidget</p></div><!--- /wp -->' );
+		expect( out ).to.contain( '<!-- wp:TextWidget --><div class="TextWidget myWidget"><p>text is: hello world</p><p>color is: default</p><p>ID is: myWidget</p></div><!-- /wp -->' );
 	} );
 
 	describe( 'for a component with children', function() {
@@ -190,7 +190,7 @@ describe( 'renderComponentToString()', function() {
 			expect( out ).to.contain( '<div class="HelloWidget myWidget"><p>hellothere</p></div>' );
 		} );
 
-		it.skip( 'returns a string representation of the component\'s children surrounded by data that encodes each child', function() {
+		it( 'returns a string representation of the component\'s children surrounded by data that encodes each child', function() {
 			component = { componentType: 'ColumnComponent', id: 'col', children: [ { componentType: 'HelloWidget', id: 'myWidget' } ] };
 			const out = renderComponentToString( component );
 			expect( out ).to.contain( '<!-- wp:ColumnComponent --><div class="ColumnComponent col">' );

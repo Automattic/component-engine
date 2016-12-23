@@ -12,9 +12,7 @@ import { renderToString } from '~/src/lib/renderer';
 import { getComponentByType } from '~/src/lib/components';
 
 function buildComponent( Component, props = {}, children = [] ) {
-	//if ( props.renderingToString ) {
-	//}
-	return <Component key={ props.key } { ...props }>{ children }</Component>;
+	return React.createElement( Component, props, children );
 }
 
 function buildComponentFromConfig( componentConfig, additionalProps = {} ) {
@@ -24,11 +22,19 @@ function buildComponentFromConfig( componentConfig, additionalProps = {} ) {
 	const childComponents = children ? children.map( child => buildComponentFromConfig( child, additionalProps ) ) : null;
 	const { renderingToString } = additionalProps;
 	const componentProps = Object.assign(
-		{},
 		props || {},
-		{ className: classNames( componentType, componentId ), key: componentId, componentType, componentId, renderingToString }
+		{ componentType, componentId, renderingToString },
+		{ className: classNames( componentType, componentId ), key: componentId }
 	);
 	return buildComponent( Component, componentProps, childComponents );
+}
+
+function wrapComponent( str, component ) {
+	if ( component.props && component.props.componentType ) {
+		const type = component.props.componentType;
+		return `<!-- wp:${ type } -->${ str }<!-- /wp -->`;
+	}
+	return str;
 }
 
 export function renderComponent( componentConfig ) {
@@ -37,5 +43,5 @@ export function renderComponent( componentConfig ) {
 
 export function renderComponentToString( componentConfig ) {
 	const instance = buildComponentFromConfig( componentConfig, { renderingToString: true } );
-	return renderToString( instance );
+	return renderToString( instance, wrapComponent );
 }
