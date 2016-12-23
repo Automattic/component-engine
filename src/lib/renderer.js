@@ -19,6 +19,10 @@ export function renderToString( component ) {
 	if ( typeof component.type !== 'function' ) {
 		return renderedChildren.length ? `<${ component.type + renderPropsAsAttrs( component.props ) }>${ renderedChildren }</${ component.type }>` : `<${ component.type + renderPropsAsAttrs( component.props ) } />`;
 	}
+	if ( component.type.prototype.render ) {
+		const instance = new component.type( component.props ); // eslint-disable-line new-cap
+		return renderToString( instance.render() );
+	}
 	return renderToString( component.type( component.props ) );
 }
 

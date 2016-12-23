@@ -1,7 +1,7 @@
 /* eslint-disable wpcalypso/import-docblock */
 /* globals describe, it */
 
-//import { createElement } from 'react';
+import React from 'react';
 import { expect } from 'chai';
 
 import { renderToString, createElement } from '~/src/lib/renderer';
@@ -18,6 +18,17 @@ describe( 'renderToString()', function() {
 		const component = createElement( MyEm, null, 'hi' );
 		const out = renderToString( component );
 		expect( out ).to.equal( '<em>hi</em>' );
+	} );
+
+	it( 'returns a string with a tag wrapping plain text for an object component', function() {
+		class MyStrong extends React.Component {
+			render() {
+				return createElement( 'strong', null, this.props.children );
+			}
+		}
+		const component = createElement( MyStrong, null, 'hi' );
+		const out = renderToString( component );
+		expect( out ).to.equal( '<strong>hi</strong>' );
 	} );
 
 	it( 'returns a string with a tag wrapping joined text for a component with many text children', function() {
