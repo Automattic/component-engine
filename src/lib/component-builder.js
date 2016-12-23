@@ -2,27 +2,18 @@
  * External dependencies
  */
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 import classNames from 'classnames';
 import shortid from 'shortid';
-import startsWith from 'lodash/startsWith';
 
 /**
  * Internal dependencies
  */
+import { renderToString } from '~/src/lib/renderer';
 import { getComponentByType } from '~/src/lib/components';
 
-const Wrapper = ( props ) => {
-	const dataProps = Object.keys( props ).filter( key => startsWith( key, 'data-block-' ) ).reduce( ( newProps, key ) => {
-		return { ...newProps, [ key ]: props[ key ] };
-	}, {} );
-	return <span { ...dataProps }>{ props.children }</span>;
-};
-
 function buildComponent( Component, props = {}, children = [] ) {
-	if ( props.renderingToString ) {
-		return <Wrapper key={ 'Wrapper-' + props.componentId } data-block-type={ props.componentType } data-block-id={ props.componentId }><Component key={ props.key } { ...props }>{ children }</Component></Wrapper>;
-	}
+	//if ( props.renderingToString ) {
+	//}
 	return <Component key={ props.key } { ...props }>{ children }</Component>;
 }
 
@@ -46,5 +37,5 @@ export function renderComponent( componentConfig ) {
 
 export function renderComponentToString( componentConfig ) {
 	const instance = buildComponentFromConfig( componentConfig, { renderingToString: true } );
-	return ReactDOMServer.renderToStaticMarkup( instance );
+	return renderToString( instance );
 }

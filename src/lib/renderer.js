@@ -12,18 +12,30 @@ export function renderToString( component ) {
 	if ( component.length ) {
 		return component;
 	}
-	let renderedChildren = '';
-	if ( component.props.children ) {
-		renderedChildren = getChildrenArray( component.props.children ).map( renderToString ).join( '' );
-	}
 	if ( typeof component.type !== 'function' ) {
-		return renderedChildren.length ? `<${ component.type + renderPropsAsAttrs( component.props ) }>${ renderedChildren }</${ component.type }>` : `<${ component.type + renderPropsAsAttrs( component.props ) } />`;
+		return renderHtmlTag( component.type, component.props, component.props.children );
 	}
 	if ( component.type.prototype.render ) {
-		const instance = new component.type( component.props ); // eslint-disable-line new-cap
-		return renderToString( instance.render() );
+		return renderObject( component.type, component.props );
 	}
-	return renderToString( component.type( component.props ) );
+	return renderFunction( component.type, component.props );
+}
+
+function renderChildren( children ) {
+	return getChildrenArray( children ).map( renderToString ).join( '' );
+}
+
+function renderFunction( func, props ) {
+	return renderToString( func( props ) );
+}
+
+function renderObject( Type, props ) {
+	const instance = new Type( props );
+	return renderToString( instance.render() );
+}
+
+function renderHtmlTag( type, props, children ) {
+	return children ? `<${ type + renderPropsAsAttrs( props ) }>${ renderChildren( children ) }</${ type }>` : `<${ type + renderPropsAsAttrs( props ) } />`;
 }
 
 function renderPropsAsAttrs( props ) {
